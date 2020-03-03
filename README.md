@@ -10,7 +10,7 @@
 
 
 <a id='video'></a>
-**_[deployed App](http://exampleframe.com.s3-website.ca-central-1.amazonaws.com/)_**
+**_[Deployed App](http://exampleframe.com.s3-website.ca-central-1.amazonaws.com/)_**
 
 ![Right Frame Preview](gif/Glass_frame_preview.gif)
 
