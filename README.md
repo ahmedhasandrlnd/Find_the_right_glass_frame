@@ -11,9 +11,11 @@
 
 <a id='video'></a>
 **_[deployed App](http://exampleframe.com.s3-website.ca-central-1.amazonaws.com/)_**
+
 ![Right Frame Preview](gif/Glass_frame_preview.gif)
 
 **_[Presentation](https://docs.google.com/presentation/d/1dR0kyp0K7dAWPLHHLWCjR6mkAK-vTtT0cLlMxEoJp7o/edit?usp=sharing)_**
+
 ![Presentation](gif/presentation.gif)
 <hr/> 
 
