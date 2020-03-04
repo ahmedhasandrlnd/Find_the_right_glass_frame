@@ -36,9 +36,15 @@ Artificial Intelligence (AI) can come as rescue in this scenario. AI is already 
 
 ![Algorithm steps](gif/steps.gif)
 
+### Step 1: Input Image Preprocessing
+
 ![Step 1](images/step1.JPG)
 
+### Step 2: Facial Landmarks Estimation
+
 ![Step 2](images/step2.JPG)
+
+### Step 3: Overlay Transparent Filter
 
 ![Step 3](images/step3.JPG)
 <hr/> 
