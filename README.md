@@ -156,7 +156,7 @@ def handle_gender(output, input_shape):
             2 * scaler, (0,255, 0), 3 * scaler)
         return image
 ```
-
+<hr/>
 [Back to Table of Content](#index)
 
 <a id='ref'></a>
