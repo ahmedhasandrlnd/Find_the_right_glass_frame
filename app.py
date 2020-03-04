@@ -24,6 +24,7 @@ def get_args():
     i_desc = "The location of the input image"
     m_desc = "The location of the model XML file"
     t_desc = "The type of model: POSE, TEXT , CAR_META, FACIAL or GENDER"
+    g_desc = "The location of glass filter "
 
     # -- Add required and optional groups
     parser._action_groups.pop()
@@ -36,6 +37,7 @@ def get_args():
     required.add_argument("-t", help=t_desc, required=True)
     optional.add_argument("-c", help=c_desc, default=None)
     optional.add_argument("-d", help=d_desc, default="CPU")
+    optional.add_argument("-g", help=g_desc, default=None)
     args = parser.parse_args()
 
     return args
@@ -54,7 +56,7 @@ def get_mask(processed_output):
     return mask
 
 
-def create_output_image(model_type, image, output):
+def create_output_image(model_type, image, glass, output):
     '''
     Using the model type, input image, and processed output,
     creates an output image showing the result of inference.
@@ -93,31 +95,6 @@ def create_output_image(model_type, image, output):
             2 * scaler, (0,255, 0), 3 * scaler)
         return image
     elif model_type == "FACIAL":
-        image_copy = np.copy(image)
-        glasses=cv2.imread('images/glasses/glass9.png',-1)
-        #print(glasses.shape)
-        scale=((output[36]-output[68])**2+(output[37]-output[69])**2)**(1/2.0)
-        glasses=cv2.resize(glasses,(int(scale),int(scale*glasses.shape[0]/glasses.shape[1])))
-        #print(glasses.shape)
-        #print(image.shape)
-        p0=(output[0]+10,output[1]+10)
-        p1=(output[24],output[1]+10)
-        p12=(output[24]-5,output[25])
-        p13=(output[26],output[27])
-        p14=(output[0]+15,output[25])
-        #print(output[36],output[37],output[68],output[69])
-        #print(output[0],output[1],output[4],output[5])
-        #image_midpoint=[(output[0]+output[4])/2 (output[1]+output[5])/2]
-        #print(image_midpoint)
-        #glass_midpoint=glass.shape/2
-        #print(glass_midpoint)
-        translation_vertical=int((output[1]+output[5])/2-glasses.shape[1]/2)
-        #print(translation_vertical)
-        translation_horizontal=int((output[0]+output[4])/2-glasses.shape[0]/2)
-        #print(translation_horizontal)
-        pr1=(output[4]-10,output[35])
-        pr2=(output[34]+5,output[5]+10)
-        #cv2.resize(glasses,[image.shape[1],image.shape[0]])
         for i in range(0,len(output),2):
             cv2.circle(image, (output[i],output[i+1]), 4, (255, 0, 0), -1)
 
@@ -133,45 +110,31 @@ def create_output_image(model_type, image, output):
                 fontScale,
                 fontColor,
                 lineType)             
-            #cv2.putText(image, i, (image.shape[0]/2,image.shape[1]/2), cv2.FONT_HERSHEY_SIMPLEX, 1 * scaler, (0,0,255), 2 * scaler)
-        #cv2.circle(image, (26,17), 1, (0, 0, 255), -1)
-        #cv2.circle(image, (17,26), 1, (0, 255, 0), -1)
-        #cv2.circle(image, (80,80), 1, (255, 0, 0), -1)
-        #cv2.circle(image, (111,56), 1, (0, 255, 0), -1)
-        #cv2.circle(image, (84,50), 1, (0, 0, 255), 2)
-        #image=cv2.add(image,glasses)
-        #image = cv2.putText(image, "{},{} ".format("person1","glass9"), (20, image.shape[0]-10), cv2.FONT_HERSHEY_SIMPLEX, 1 * scaler, (0,255, 0), 2 * scaler)
-        points = np.array([p0, p1, p12,p14])
-       
-        #cv2.fillConvexPoly(image,points,(0,0,0))
-        #cv2.rectangle(image,p12,p0,(0,0,255),2)
-        #cv2.rectangle(image,pr1,pr2,(0,0,255),2)
+        return image
+    elif model_type == "GLASS":
+        image_copy = np.copy(image)
+        glasses=cv2.imread(glass,-1)
+        scale=((output[36]-output[68])**2+(output[37]-output[69])**2)**(1/2.0)
+        glasses=cv2.resize(glasses,(int(scale),int(scale*glasses.shape[0]/glasses.shape[1])))
+        translation_vertical=int((output[1]+output[5])/2-glasses.shape[1]/2)
+        translation_horizontal=int((output[0]+output[4])/2-glasses.shape[0]/2)
         gw,gh,gc = glasses.shape
-        #for i in range(0,gw):       # Overlay the filter based on the alpha channel(mustache1 male4)
-        #    for j in range(0,gh):
-        #        if glasses[i,j][3] != 0:
-        #            image[i+133,j+62]=glasses[i,j][:-1]
-        #print(image.shape)
-        #for i in range(0,gw):       # Overlay the filter based on the alpha channel(glass)
-        #    for j in range(0,gh):
-        #        if glasses[i,j][3] != 0:
-        #            image[i+translation_vertical,j+translation_horizontal]=glasses[i,j][:-1]
-                    #print(image.shape)
+        for i in range(0,gw):       # Overlay the filter based on the alpha channel(glass)
+            for j in range(0,gh):
+                if glasses[i,j][3] != 0:
+                    image[i+translation_vertical,j+translation_horizontal]=glasses[i,j][:-1]
         return image
     elif model_type == "GENDER":
-        print(output[0], output[1])
+        #print(output[0], output[1])
         age = output[0]
-        print(age)
+        #print(age)
         gender_type = GENDER_TYPES[output[1]]
-        
-        print(gender_type)
-        # Scale the output text by the image shape
+        #print(gender_type)
         scaler = max(int(image.shape[0] / 5000), 1)
-        # Write the text of color and type onto the image
         image = cv2.putText(image, 
             "{},{} ".format(age,gender_type), 
             (20, image.shape[0]-10), cv2.FONT_HERSHEY_SIMPLEX, 
-            1 * scaler, (0,255, 0), 2 * scaler)
+            2 * scaler, (0,255, 0), 3 * scaler)
         return image
     else:
         print("Unknown model type, unable to create output image.")
@@ -207,7 +170,7 @@ def perform_inference(args):
 
     # Create an output image based on network
     try: 
-        output_image = create_output_image(args.t, image, processed_output)
+        output_image = create_output_image(args.t, image, args.g, processed_output)
         print("Success")
     except:
         output_image=image
@@ -215,7 +178,7 @@ def perform_inference(args):
 
     # Save down the resulting image
     #cv2.imwrite("outputs/model0/{}-output9.png".format(args.t), output_image)
-    cv2.imwrite("outputs/{}-output_marks.png".format(args.t), output_image)
+    cv2.imwrite("outputs/{}-output_1.png".format(args.t), output_image)
 
 def main():
     args = get_args()

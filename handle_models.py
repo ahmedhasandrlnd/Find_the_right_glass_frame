@@ -54,31 +54,46 @@ def handle_car(output, input_shape):
 
 def handle_facial(output, input_shape):
     '''
-    Handles the output of the Car Metadata model.
-    Returns two integers: the argmax of each softmax output.
-    The first is for color, and the second for type.
+    Handles the output of the Facial landmarks Metadata model.
+    Returns the coordinates of 35 facial landmarks.
     '''
-    # TODO 1: Get the argmax of the "color" output
+    #print(output.keys())
     fc=output['align_fc3']
-    #print(fc[0][0],fc[0][1],fc[0][2],fc[0][3] )
+    
     coords=[]
     for i in range(0,len(fc[0]),2):
         x=int(fc[0][i]*input_shape[1])
         y=int(fc[0][i+1]*input_shape[0])
         coords.append(x)
         coords.append(y)
-    #print(input_shape)
-    #print(len(coords))
+    return coords
+
+def handle_glass(output, input_shape):
+    '''
+    Handles the output of the Facial landmarks Metadata model.
+    Returns the coordinates of 35 facial landmarks.
+    '''
+    #print(output.keys())
+    fc=output['align_fc3']
+    
+    coords=[]
+    for i in range(0,len(fc[0]),2):
+        x=int(fc[0][i]*input_shape[1])
+        y=int(fc[0][i+1]*input_shape[0])
+        coords.append(x)
+        coords.append(y)
     return coords
 
 def handle_gender(output, input_shape):
+    '''
+    Handles the output of the Gender and Age Metadata model.
+    Returns the age and gender: argmax of softmax output
+    '''
     #print(output.keys())
-    print(output["prob"].shape)
     age=int(output["age_conv3"].flatten()[0]*100)
     gender_type=output["prob"].flatten()
     gender_class=np.argmax(gender_type) 
-    print(gender_class)
-    print(age)  
+
     return age, gender_class
 
 
@@ -97,6 +112,8 @@ def handle_output(model_type):
         return handle_facial
     elif model_type=="GENDER":
         return handle_gender
+    elif model_type=="GLASS":
+        return handle_glass    
     else:
         return None
 
