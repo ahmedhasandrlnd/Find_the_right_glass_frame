@@ -162,8 +162,8 @@ def handle_gender(output, input_shape):
 <a id='ref'></a>
 ## References
 1. [Host a Static Website](https://aws.amazon.com/getting-started/projects/host-static-website/)
-1. [AWS CloudFormation User Guide](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-us-west-2.html#w2ab1c28c58c13c35)
 1. [URL of Deployed App](http://exampleframe.com.s3-website.ca-central-1.amazonaws.com/)
+1. [Presentation](https://docs.google.com/presentation/d/1dR0kyp0K7dAWPLHHLWCjR6mkAK-vTtT0cLlMxEoJp7o/edit?usp=sharing)
 1. [The best glasses for your face shape and skin tone](https://www.allaboutvision.com/eyeglasses/eyeglasses_shape_color_analysis.htm)
 <hr/> 
 
