@@ -72,8 +72,89 @@ python app.py -i "images/person1.jpg" -t "GENDER" -m "models/age-gender-recognit
 
 <a id='code'></a>
 ## Code
+### Handle Facial Landmarks Metadata Model
 ```
+def handle_facial(output, input_shape):
+    '''
+    Handles the output of the Facial landmarks Metadata model.
+    Returns the coordinates of 35 facial landmarks.
+    '''
+    #print(output.keys())
+    fc=output['align_fc3']
+    
+    coords=[]
+    for i in range(0,len(fc[0]),2):
+        x=int(fc[0][i]*input_shape[1])
+        y=int(fc[0][i+1]*input_shape[0])
+        coords.append(x)
+        coords.append(y)
+    return coords
+```
+### Handle Age and Gender Model
+```
+def handle_gender(output, input_shape):
+    '''
+    Handles the output of the Gender and Age Metadata model.
+    Returns the age and gender: argmax of softmax output
+    '''
+    #print(output.keys())
+    age=int(output["age_conv3"].flatten()[0]*100)
+    gender_type=output["prob"].flatten()
+    gender_class=np.argmax(gender_type) 
 
+    return age, gender_class
+
+```
+### Output Facial Landmarks Model Image
+```
+    if model_type == "FACIAL":
+        for i in range(0,len(output),2):
+            cv2.circle(image, (output[i],output[i+1]), 4, (255, 0, 0), -1)
+
+            font                   = cv2.FONT_HERSHEY_SIMPLEX
+            bottomLeftCornerOfText = (output[i],output[i+1])
+            fontScale              = 0.7
+            fontColor              = (255,255,255)
+            lineType               = 2
+
+            cv2.putText(image,'p'+str(int(i/2)), 
+                bottomLeftCornerOfText, 
+                font, 
+                fontScale,
+                fontColor,
+                lineType)             
+        return image
+```
+### Ouput Glass Filter Model Output
+```
+    if model_type == "GLASS":
+        image_copy = np.copy(image)
+        glasses=cv2.imread(glass,-1)
+        scale=((output[36]-output[68])**2+(output[37]-output[69])**2)**(1/2.0)
+        glasses=cv2.resize(glasses,(int(scale),int(scale*glasses.shape[0]/glasses.shape[1])))
+        translation_vertical=int((output[1]+output[5])/2-glasses.shape[1]/2)
+        translation_horizontal=int((output[0]+output[4])/2-glasses.shape[0]/2)
+        gw,gh,gc = glasses.shape
+        for i in range(0,gw):       # Overlay the filter based on the alpha channel(glass)
+            for j in range(0,gh):
+                if glasses[i,j][3] != 0:
+                    image[i+translation_vertical,j+translation_horizontal]=glasses[i,j][:-1]
+        return image
+```
+### Output Age and Gender Model Output
+```
+    if model_type == "GENDER":
+        #print(output[0], output[1])
+        age = output[0]
+        #print(age)
+        gender_type = GENDER_TYPES[output[1]]
+        #print(gender_type)
+        scaler = max(int(image.shape[0] / 5000), 1)
+        image = cv2.putText(image, 
+            "{},{} ".format(age,gender_type), 
+            (20, image.shape[0]-10), cv2.FONT_HERSHEY_SIMPLEX, 
+            2 * scaler, (0,255, 0), 3 * scaler)
+        return image
 ```
 
 [Back to Table of Content](#index)
