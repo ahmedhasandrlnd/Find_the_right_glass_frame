@@ -32,9 +32,15 @@ Artificial Intelligence (AI) can come as rescue in this scenario. AI is already 
 [Back to Table of Content](#index)
  
 <a id='works'></a>
-## How AI works here
-All the input images of this webapp are taken from https://thispersondoesnotexist.com/, but it will work with any passport sized photograph. In the first step, 35 facial landmarks are estimated from the face of the image. Then a transperant background glass frame is superimposed on the face using the guide of these facial landmarks.  <br/>
-![Steps](images/steps.JPG)
+## Algorithm steps
+
+![Algorithm steps](gif/steps.gif)
+
+![Step 1](images/step1.JPG)
+
+![Step 2](images/step2.JPG)
+
+![Step 3](images/step3.JPG)
 <hr/> 
 
 [Back to Table of Content](#index)
