@@ -48,7 +48,7 @@ Artificial Intelligence (AI) can come as rescue in this scenario. AI is already 
 
 ![Step 3](images/step3.JPG)
 
-Refer to the [Code](#code)
+Refer to the [Code](#code) for more details.
 
 <hr/> 
 
@@ -164,6 +164,7 @@ def handle_gender(output, input_shape):
         return image
 ```
 <hr/>
+
 [Back to Table of Content](#index)
 
 <a id='ref'></a>
