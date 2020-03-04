@@ -47,12 +47,19 @@ Artificial Intelligence (AI) can come as rescue in this scenario. AI is already 
 ### Step 3: Overlay Transparent Filter
 
 ![Step 3](images/step3.JPG)
+
+Refer to the [Code](#code)
+
 <hr/> 
 
 [Back to Table of Content](#index)
 
 <a id='usage'></a>
 ## Usage
+### Initialize OpenVINO environment
+
+![OpenVINO Environment](images/env.JPG)
+
 ### Facial Landmarks model
 ```
 python app.py -i "images/person1.jpg" -t "FACIAL" -m "models/facial-landmarks-35-adas-0002.xml"
