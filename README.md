@@ -125,7 +125,7 @@ def handle_gender(output, input_shape):
                 lineType)             
         return image
 ```
-### Ouput Glass Filter Model Output
+### Ouput Glass Filter Model Image
 ```
     if model_type == "GLASS":
         image_copy = np.copy(image)
@@ -141,7 +141,7 @@ def handle_gender(output, input_shape):
                     image[i+translation_vertical,j+translation_horizontal]=glasses[i,j][:-1]
         return image
 ```
-### Output Age and Gender Model Output
+### Output Age and Gender Model Image
 ```
     if model_type == "GENDER":
         #print(output[0], output[1])
