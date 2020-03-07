@@ -173,6 +173,9 @@ def handle_gender(output, input_shape):
 
 ![future works](images/future.JPG)
 
+<hr/>
+
+[Back to Table of Content](#index)
 
 <a id='ref'></a>
 ## References
