@@ -6,6 +6,7 @@
 - [Algorithmic Steps](#works)
 - [Usage](#usage)
 - [Code](#code)
+- [Future Works](#future)
 - [References](#ref)
 
 
@@ -166,6 +167,12 @@ def handle_gender(output, input_shape):
 <hr/>
 
 [Back to Table of Content](#index)
+
+<a id='future'></a>
+## Future Works
+
+![future works](images/future.JPG)
+
 
 <a id='ref'></a>
 ## References
